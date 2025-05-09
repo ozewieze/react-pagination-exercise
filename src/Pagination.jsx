@@ -1,46 +1,81 @@
 export function Pagination({ currentPage, pageCount, onPageChanged }) {
+  let pageNumberArray;
+
+  if (pageCount <= 6) {
+    pageNumberArray = [];
+    for (let i = 0; i < pageCount; i++) {
+      pageNumberArray.push(i + 1);
+    }
+  } else if (currentPage > 3 && currentPage < pageCount - 2) {
+    pageNumberArray = [
+      1,
+      null,
+      currentPage - 1,
+      currentPage,
+      currentPage + 1,
+      null,
+      pageCount,
+    ];
+  } else if (currentPage <= 3) {
+    pageNumberArray = [1, 2, 3, 4, null, pageCount];
+  } else {
+    pageNumberArray = [
+      1,
+      null,
+      pageCount - 3,
+      pageCount - 2,
+      pageCount - 1,
+      pageCount,
+    ];
+  }
+  const pageLinks = [];
+  pageNumberArray.forEach((pageNumber, index) => {
+    if (pageNumber === null) {
+      pageLinks.push(
+        <li key={index}>
+          <span className="pagination-ellipsis">&hellip;</span>
+        </li>
+      );
+    } else {
+      pageLinks.push(
+        <li key={index}>
+          <button
+            className={
+              'pagination-link ' +
+              (pageNumber === currentPage ? 'is-current' : '')
+            }
+            aria-label={`Go to page ${pageNumber}`}
+            onClick={() => onPageChanged(pageNumber)}
+          >
+            {pageNumber}
+          </button>
+        </li>
+      );
+    }
+  });
   // https://bulma.io/documentation/components/pagination/
   return (
     <nav className="pagination" role="navigation" aria-label="pagination">
-      <button className="pagination-previous">Previous page</button>
-      <button className="pagination-next">Next page</button>
-      <ul className="pagination-list">
-        <li>
-          <button className="pagination-link" aria-label="Goto page 1">
-            1
-          </button>
-        </li>
-        <li>
-          <span className="pagination-ellipsis">&hellip;</span>
-        </li>
-        <li>
-          <button className="pagination-link" aria-label="Goto page 45">
-            45
-          </button>
-        </li>
-        <li>
-          <button
-            className="pagination-link is-current"
-            aria-label="Page 46"
-            aria-current="page"
-          >
-            46
-          </button>
-        </li>
-        <li>
-          <button className="pagination-link" aria-label="Goto page 47">
-            47
-          </button>
-        </li>
-        <li>
-          <span className="pagination-ellipsis">&hellip;</span>
-        </li>
-        <li>
-          <button className="pagination-link" aria-label="Goto page 86">
-            86
-          </button>
-        </li>
-      </ul>
+      <button
+        onClick={() => {
+          onPageChanged(currentPage - 1);
+        }}
+        className="pagination-previous"
+        disabled={currentPage === 1}
+      >
+        Previous page
+      </button>
+      <button
+        onClick={() => {
+          onPageChanged(currentPage + 1);
+        }}
+        className="pagination-next"
+        disabled={currentPage === pageCount}
+      >
+        Next page
+      </button>
+
+      <ul className="pagination-list">{pageLinks}</ul>
     </nav>
   );
 }

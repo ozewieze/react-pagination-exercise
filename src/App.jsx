@@ -1,7 +1,7 @@
-import "./App.css";
+import './App.css';
 
-import { useState } from "react";
-import { Pagination } from "./Pagination";
+import { useState } from 'react';
+import { Pagination } from './Pagination';
 
 function App() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -10,11 +10,14 @@ function App() {
 
   function handlePageChanged(pageNumber) {
     // TO DO
+
+    setCurrentPage(pageNumber);
+    // console.log(currentPage);
   }
 
   return (
-    <div style={{ margin: "2rem" }}>
-      <div style={{ marginBottom: "2rem" }}>You are on page {currentPage}</div>
+    <div style={{ margin: '2rem' }}>
+      <div style={{ marginBottom: '2rem' }}>You are on page {currentPage}</div>
       <Pagination
         currentPage={currentPage}
         pageCount={pageCount}
